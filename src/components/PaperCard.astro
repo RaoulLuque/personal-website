@@ -1,0 +1,128 @@
+---
+import type { Paper } from '../lib/types';
+import { site } from '../data/site';
+import { asset } from '../lib/paths';
+
+interface Props {
+  paper: Paper;
+  index?: number;
+}
+
+const { paper, index = 0 } = Astro.props;
+const { title, authors, venue, year, note, figure, links = {} } = paper;
+
+// The arrow points at the most useful artifact available.
+const primary = links.pdf ?? links.arxiv ?? links.project ?? links.code;
+
+const linkLabels: Array<[keyof typeof links, string]> = [
+  ['pdf', 'PDF'],
+  ['arxiv', 'arXiv'],
+  ['code', 'Code'],
+  ['project', 'Project'],
+  ['bibtex', 'BibTeX'],
+];
+const secondary = linkLabels
+  .map(([key, label]) => ({ label, url: links[key] }))
+  .filter((l): l is { label: string; url: string } => !!l.url);
+---
+
+<div class="px-1 pb-2">
+  <div
+    class="animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors focus-within:bg-neutral-100 hover:bg-neutral-100"
+    style={`animation-delay: ${index * 60}ms`}
+  >
+    <div class="flex h-full w-full flex-col">
+      <div
+        class="flex items-center justify-between pt-2 pr-2 pl-4 text-sm tracking-tight text-neutral-400"
+      >
+        <span class="min-w-0 truncate py-1.5">Research · {year}</span>
+        {
+          primary && (
+            <a
+              href={primary}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={title}
+              class="flex h-8 w-8 shrink-0 cursor-alias items-center justify-center rounded-full transition-colors group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </a>
+          )
+        }
+      </div>
+
+      <div class="flex flex-1 flex-col gap-4 p-4 sm:flex-row sm:gap-6">
+        {
+          figure && (
+            <div class="aspect-[4/3] w-full shrink-0 overflow-hidden rounded sm:aspect-auto sm:w-2/5">
+              <img
+                src={asset(figure)}
+                alt={`Teaser figure for ${title}`}
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-contain transition-transform group-hover:scale-105"
+              />
+            </div>
+          )
+        }
+
+        <div class="flex min-w-0 flex-1 flex-col">
+          <h2 class="font-serif text-xl leading-tight font-light text-neutral-900 sm:text-2xl">
+            {title}
+          </h2>
+
+          <p class="mt-3 text-sm tracking-tight text-neutral-400">
+            {
+              authors.map((name, i) => (
+                <>
+                  {i > 0 && ', '}
+                  {name === site.author ? (
+                    <span class="text-neutral-900">{name}</span>
+                  ) : (
+                    name
+                  )}
+                </>
+              ))
+            }
+          </p>
+
+          <p class="mt-1 text-sm tracking-tight text-neutral-400">
+            {venue}{note && <span class="text-neutral-900"> · {note}</span>}
+          </p>
+
+          {
+            secondary.length > 0 && (
+              <p class="mt-auto pt-4 text-sm tracking-tight">
+                {secondary.map((link, i) => (
+                  <>
+                    {i > 0 && <span class="text-neutral-300"> · </span>}
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      class="cursor-alias rounded text-neutral-900 underline decoration-sky-400 underline-offset-4 transition-colors hover:text-neutral-500 focus-visible:ring-4 focus-visible:ring-blue-200"
+                    >
+                      {link.label}
+                    </a>
+                  </>
+                ))}
+              </p>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+---
+import { asset } from '../lib/paths';
+
+interface Props {
+  category: string;
+  categoryHref?: string;
+  label?: string;
+  title: string;
+  href?: string;
+  image?: string;
+  imageAlt?: string;
+  blurb?: string;
+  wide?: boolean;
+  index?: number;
+  class?: string;
+}
+
+const {
+  category,
+  categoryHref,
+  label,
+  title,
+  href,
+  image,
+  imageAlt,
+  blurb,
+  wide = false,
+  index = 0,
+  class: className,
+} = Astro.props;
+
+const external = !!href && /^https?:/.test(href);
+const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
+---
+
+<div
+  class:list={[
+    'px-1 pb-2',
+    wide ? 'aspect-[2] sm:col-span-2' : 'aspect-square',
+    className,
+  ]}
+>
+  <div
+    class="animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors focus-within:bg-neutral-100 hover:bg-neutral-100"
+    style={`animation-delay: ${index * 60}ms`}
+  >
+    <div class="relative isolate h-full w-full">
+      <div
+        class="flex items-center justify-between pt-2 pr-2 pl-4 text-sm tracking-tight text-neutral-400"
+      >
+        <span class="min-w-0 truncate py-1.5">
+          {
+            categoryHref ? (
+              <a
+                href={categoryHref}
+                class="transition-colors hover:text-neutral-500 hover:underline focus-visible:text-neutral-500 focus-visible:underline focus-visible:ring-4 focus-visible:ring-blue-200"
+              >
+                {category}
+              </a>
+            ) : (
+              category
+            )
+          }
+          {' · '}{label ?? title}
+        </span>
+        {
+          href && (
+            <a
+              href={href}
+              {...linkAttrs}
+              aria-label={title}
+              class:list={[
+                'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200',
+                external && 'cursor-alias',
+              ]}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="h-4 w-4"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </a>
+          )
+        }
+      </div>
+
+      {
+        image ? (
+          /* inset-0 rather than the reference's bare `absolute`: without it the
+             image starts at its static position below the label strip and its
+             bottom is clipped by exactly the strip's height. */
+          <a
+            href={href}
+            {...linkAttrs}
+            class:list={['absolute inset-0 -z-10 block', external && 'cursor-alias']}
+            tabindex="-1"
+            aria-hidden="true"
+          >
+            <img
+              src={asset(image)}
+              alt={imageAlt ?? title}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-contain transition-transform group-hover:scale-105"
+            />
+          </a>
+        ) : (
+          <div class="absolute inset-0 -z-10 flex flex-col justify-end p-4">
+            <p class="font-serif text-xl leading-tight font-light text-neutral-900">{title}</p>
+            {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>

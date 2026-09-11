@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import { href } from '../lib/paths';
+import { papers } from '../data/research';
+import { projects } from '../data/projects';
+import { courses } from '../data/teaching';
+
+// The landing must fit one screen on desktop, which fixes the card budget:
+// the intro spans 2 columns and 2 rows, leaving 2 cells at `lg` (3 columns)
+// and 4 at `xl` (4 columns). So we show four, and hide the last two at `lg`.
+// Adding a fifth here WILL reintroduce a scrollbar — see CLAUDE.md.
+const paper = papers[0];
+const featured = [
+  {
+    category: 'Research',
+    categoryHref: href('research'),
+    label: paper?.venue,
+    title: paper?.title ?? '',
+    image: paper?.figure,
+    href: paper?.links?.pdf ?? paper?.links?.arxiv,
+  },
+  {
+    category: 'Projects',
+    categoryHref: href('projects'),
+    title: projects[0]?.title ?? '',
+    image: projects[0]?.image,
+    href: projects[0]?.href,
+  },
+  {
+    category: 'Projects',
+    categoryHref: href('projects'),
+    title: projects[1]?.title ?? '',
+    image: projects[1]?.image,
+    href: projects[1]?.href,
+  },
+  {
+    category: 'Teaching',
+    categoryHref: href('teaching'),
+    label: courses[0]?.term,
+    title: courses[0]?.title ?? '',
+    href: courses[0]?.href ?? href('teaching'),
+  },
+].filter((card) => card.title);
+---
+
+<Base fullscreen>
+  <Grid class="pb-8 lg:min-h-0 lg:flex-1 lg:grid-rows-2 lg:pb-0">
+    <div class="row-span-2 px-1 pb-2 sm:col-span-2 lg:min-h-0">
+      <div class="flex h-full w-full items-center p-4 sm:p-8">
+        <!-- Edit this prose directly. Emphasised words are text-neutral-900 with
+             a decoration-* accent; keep each accent colour distinct. -->
+        <h1
+          class="font-serif text-2xl leading-tight! font-light text-neutral-400 sm:text-3xl lg:text-4xl"
+        >
+          Hi there, I&rsquo;m <span class="text-neutral-900">Raoul</span> 👋 A mathematics PhD
+          student at <a
+            href="https://www.rwth-aachen.de/"
+            target="_blank"
+            rel="noreferrer"
+            class="cursor-alias rounded text-neutral-900 underline decoration-sky-400 decoration-wavy underline-offset-4 transition-colors hover:text-neutral-500 focus-visible:ring-4 focus-visible:ring-blue-200"
+            >RWTH Aachen</a
+          > at the chairs on <a
+            href="https://www.oms.rwth-aachen.de/cms/~eikf/oms/?lidx=1"
+            target="_blank"
+            rel="noreferrer"
+            class="cursor-alias rounded text-neutral-900 underline decoration-teal-400 underline-offset-4 transition-colors hover:text-neutral-500 focus-visible:ring-4 focus-visible:ring-blue-200"
+            >Management Science</a> and <a
+            href="https://www.gdm.rwth-aachen.de/cms/~bldute/gdm/?lidx=1"
+            target="_blank"
+            rel="noreferrer"
+            class="cursor-alias rounded text-neutral-900 underline decoration-purple-400 underline-offset-4 transition-colors hover:text-neutral-500 focus-visible:ring-4 focus-visible:ring-blue-200"
+            >Algorithmic Game Theory and Discrete Mathematics</a>.
+
+          <br /><br />
+
+          Most of my time at work goes into <a
+            href={href('research')}
+            class="rounded text-neutral-900 underline decoration-orange-400 underline-offset-4 hover:underline focus-visible:ring-4 focus-visible:ring-blue-200"
+            >research</a
+
+          >, however I also have the pleasure of <a
+            href={href('teaching')}
+            class="rounded text-neutral-900 underline decoration-fuchsia-400 underline-offset-4 hover:underline focus-visible:ring-4 focus-visible:ring-blue-200"
+            >teaching</a
+          >.
+          
+          <br /><br />
+
+          When I find some time outside of work, I like to work on different kinds of <a
+            href={href('projects')}
+            class="rounded text-neutral-900 underline decoration-lime-400 underline-offset-4 hover:underline focus-visible:ring-4 focus-visible:ring-blue-200"
+            >projects</a
+          >.
+        </h1>
+      </div>
+    </div>
+
+    {
+      featured.map((card, i) => (
+        <Card
+          category={card.category}
+          categoryHref={card.categoryHref}
+          label={card.label}
+          title={card.title}
+          href={card.href}
+          image={card.image}
+          index={i + 1}
+          class={i >= 2 ? 'lg:hidden xl:block lg:aspect-auto lg:min-h-0' : 'lg:aspect-auto lg:min-h-0'}
+        />
+      ))
+    }
+  </Grid>
+</Base>

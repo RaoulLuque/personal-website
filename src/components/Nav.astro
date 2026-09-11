@@ -1,0 +1,47 @@
+---
+import { site, nav } from '../data/site';
+import { href, isCurrent } from '../lib/paths';
+
+const pathname = Astro.url.pathname;
+---
+
+<nav
+  class="pointer-events-none sticky top-0 isolate z-10 flex items-center justify-center px-1 py-4 md:justify-between"
+>
+  <div
+    class="pointer-events-auto relative flex rounded-lg border border-neutral-200 bg-white/70 p-1 shadow-md backdrop-blur-md"
+  >
+    {
+      nav.map((item) => {
+        const current = isCurrent(pathname, item.path);
+        return (
+          <a
+            href={href(item.path)}
+            aria-current={current ? 'page' : undefined}
+            class:list={[
+              'rounded px-2 py-1 text-sm tracking-tight transition-colors hover:text-neutral-900 focus:text-neutral-900 focus-visible:ring-4 focus-visible:ring-blue-200',
+              current ? 'bg-neutral-200 text-neutral-900' : 'text-neutral-400',
+            ]}
+          >
+            {item.label}
+          </a>
+        );
+      })
+    }
+  </div>
+
+  <div class="pointer-events-auto hidden md:flex">
+    {
+      site.links.map((link) => (
+        <a
+          href={link.href}
+          target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+          rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
+          class="cursor-alias rounded px-2 py-1 text-sm tracking-tight text-neutral-400 underline-offset-4 decoration-wavy transition-colors hover:text-neutral-900 hover:underline focus:text-neutral-900 focus-visible:ring-4 focus-visible:ring-blue-200"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>

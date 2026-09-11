@@ -1,0 +1,22 @@
+---
+interface Props {
+  heading: string;
+  intro?: string;
+}
+const { heading, intro } = Astro.props;
+const hasSlot = Astro.slots.has('default');
+---
+
+<div class="flex flex-col gap-4 px-2 pt-4 pb-8 md:gap-8">
+  <h1 class="font-serif text-6xl font-extralight text-neutral-900 md:text-8xl">
+    {heading.toLowerCase()}.
+  </h1>
+  {intro && <p class="max-w-prose tracking-tight text-neutral-400">{intro}</p>}
+  {
+    hasSlot && (
+      <p class="max-w-prose tracking-tight text-neutral-400">
+        <slot />
+      </p>
+    )
+  }
+</div>

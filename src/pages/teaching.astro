@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import { courses } from '../data/teaching';
+---
+
+<Base title="Teaching">
+  <PageHeader
+    heading="Teaching"
+    intro="Courses I've helped run, and the students I've had the pleasure of confusing."
+  />
+  <Grid class="pb-8">
+    {
+      courses.map((course, i) => (
+        <Card
+          category="Teaching"
+          label={course.term}
+          title={course.title}
+          href={course.href}
+          image={course.image}
+          blurb={[course.role, course.institution, course.blurb]
+            .filter(Boolean)
+            .join(' · ')}
+          wide={course.wide}
+          index={i}
+        />
+      ))
+    }
+  </Grid>
+</Base>
