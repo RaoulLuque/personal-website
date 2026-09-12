@@ -23,6 +23,12 @@ export interface Paper {
   year: number;
   note?: string;
   figure?: string;
+  figureHref?: string;
+  imageBleed?: number;
+  imageBleedTop?: number;
+  imageBleedLeft?: number;
+  imageBleedCenter?: boolean;
+  imageBleedMinHeight?: number;
   links?: {
     pdf?: string;
     arxiv?: string;

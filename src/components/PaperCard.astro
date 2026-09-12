@@ -9,10 +9,38 @@ interface Props {
 }
 
 const { paper, index = 0 } = Astro.props;
-const { title, authors, venue, year, note, figure, links = {} } = paper;
+const { title, authors, venue, year, note, figure, figureHref, links = {} } = paper;
 
-// The arrow points at the most useful artifact available.
+const {
+  imageBleed,
+  imageBleedTop = 40,
+  imageBleedLeft = 16,
+  imageBleedCenter = false,
+  imageBleedMinHeight,
+} = paper;
+const bleeds = typeof imageBleed === 'number' && !!figure;
+const bleedGutter = imageBleedLeft + (imageBleedCenter ? imageBleedLeft : 16);
+
+const minHeight = bleeds && imageBleedMinHeight ? imageBleedMinHeight : undefined;
+
 const primary = links.pdf ?? links.arxiv ?? links.project ?? links.code;
+
+// The figure links to the same artifact as the arrow unless `figureHref` names
+// a different one. When it matches, keep it out of the tab order and the
+// accessibility tree so it isn't a second stop to an identical destination.
+const figureLink = figureHref ?? primary;
+const figureDuplicatesArrow = figureLink === primary;
+const figureLinkProps = figureLink
+  ? {
+      href: figureLink,
+      target: '_blank',
+      rel: 'noreferrer',
+      ...(figureDuplicatesArrow
+        ? { tabindex: '-1', 'aria-hidden': 'true' }
+        : { 'aria-label': `${title} — figure link` }),
+    }
+  : {};
+const FigureLink = figureLink ? 'a' : 'div';
 
 const linkLabels: Array<[keyof typeof links, string]> = [
   ['pdf', 'PDF'],
@@ -28,10 +56,18 @@ const secondary = linkLabels
 
 <div class="px-1 pb-2">
   <div
-    class="animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors focus-within:bg-neutral-100 hover:bg-neutral-100"
-    style={`animation-delay: ${index * 60}ms`}
+    class:list={[
+      'animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors focus-within:bg-neutral-100 hover:bg-neutral-100',
+      minHeight && 'sm:[min-height:var(--bleed-min-h)]',
+    ]}
+    style={[
+      `animation-delay: ${index * 60}ms`,
+      minHeight && `--bleed-min-h: ${minHeight}px`,
+    ]
+      .filter(Boolean)
+      .join('; ')}
   >
-    <div class="flex h-full w-full flex-col">
+    <div class="relative isolate flex h-full w-full flex-col">
       <div
         class="flex items-center justify-between pt-2 pr-2 pl-4 text-sm tracking-tight text-neutral-400"
       >
@@ -63,17 +99,51 @@ const secondary = linkLabels
         }
       </div>
 
-      <div class="flex flex-1 flex-col gap-4 p-4 sm:flex-row sm:gap-6">
+      {
+        bleeds && (
+          <FigureLink
+            {...figureLinkProps}
+            class:list={['absolute -z-10 hidden sm:block', figureLink && 'cursor-alias']}
+            style={`top: ${imageBleedTop}px; left: ${imageBleedLeft}px; width: ${imageBleed}%`}
+          >
+            <img
+              src={asset(figure)}
+              alt={`Teaser figure for ${title}`}
+              loading="lazy"
+              decoding="async"
+              class="block h-auto w-full origin-top transition-transform group-hover:scale-105"
+            />
+          </FigureLink>
+        )
+      }
+
+      <div
+        class:list={[
+          'flex flex-1 flex-col gap-4 py-4 pr-4 pl-4 sm:flex-row sm:gap-6',
+          bleeds && 'sm:pl-0 sm:[margin-left:var(--bleed-pad)]',
+        ]}
+        style={bleeds ? `--bleed-pad: calc(${imageBleed}% + ${bleedGutter}px)` : undefined}
+      >
         {
           figure && (
-            <div class="aspect-[4/3] w-full shrink-0 overflow-hidden rounded sm:aspect-auto sm:w-2/5">
-              <img
-                src={asset(figure)}
-                alt={`Teaser figure for ${title}`}
-                loading="lazy"
-                decoding="async"
-                class="h-full w-full object-contain transition-transform group-hover:scale-105"
-              />
+            <div
+              class:list={[
+                'aspect-[4/3] w-full shrink-0 overflow-hidden rounded',
+                bleeds ? 'sm:hidden' : 'sm:aspect-auto sm:w-2/5',
+              ]}
+            >
+              <FigureLink
+                {...figureLinkProps}
+                class:list={['block h-full w-full', figureLink && 'cursor-alias']}
+              >
+                <img
+                  src={asset(figure)}
+                  alt={`Teaser figure for ${title}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-contain transition-transform group-hover:scale-105"
+                />
+              </FigureLink>
             </div>
           )
         }
