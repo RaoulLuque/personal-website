@@ -12,6 +12,12 @@ interface Props {
   blurb?: string;
   wide?: boolean;
   split?: boolean;
+  imageFit?: 'contain' | 'cover';
+  imageAnchor?: 'top' | 'center' | 'bottom';
+  imageBleed?: number;
+  imageBleedTop?: number;
+  imageBleedLeft?: number;
+  imageBleedCenter?: boolean;
   credit?: string;
   creditHref?: string;
   index?: number;
@@ -29,11 +35,24 @@ const {
   blurb,
   wide = false,
   split = false,
+  imageFit = 'contain',
+  imageAnchor = 'center',
+  imageBleed,
+  imageBleedTop = 40,
+  imageBleedLeft = 16,
+  imageBleedCenter = false,
   credit,
   creditHref,
   index = 0,
   class: className,
 } = Astro.props;
+
+const fitClass = imageFit === 'cover' ? 'object-cover' : 'object-contain';
+const anchorClass = { top: 'object-top', center: 'object-center', bottom: 'object-bottom' }[imageAnchor];
+const clearsLabel = imageAnchor !== 'center';
+
+const bleeds = typeof imageBleed === 'number';
+const bleedGutter = imageBleedLeft + (imageBleedCenter ? imageBleedLeft : 16);
 
 const external = !!href && /^https?:/.test(href);
 const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
@@ -98,7 +117,33 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
       </div>
 
       {
-        split && image ? (
+        split && image && bleeds ? (
+          <>
+            <a
+              href={href}
+              {...linkAttrs}
+              class:list={['absolute left-0 -z-10 block', external && 'cursor-alias']}
+              style={`top: ${imageBleedTop}px; left: ${imageBleedLeft}px; width: ${imageBleed}%`}
+              tabindex="-1"
+              aria-hidden="true"
+            >
+              <img
+                src={asset(image)}
+                alt={imageAlt ?? title}
+                loading="lazy"
+                decoding="async"
+                class="block h-auto w-full origin-top transition-transform group-hover:scale-105"
+              />
+            </a>
+            <div
+              class="absolute inset-y-0 right-0 flex flex-col justify-center py-4 pr-4"
+              style={`left: calc(${imageBleed}% + ${bleedGutter}px)`}
+            >
+              <p class="font-serif text-2xl leading-tight font-light text-neutral-900">{title}</p>
+              {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
+            </div>
+          </>
+        ) : split && image ? (
           <div class="absolute inset-0 top-10 flex items-center gap-4 p-4 sm:gap-6">
             <a
               href={href}
@@ -120,14 +165,12 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
               {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
             </div>
           </div>
-        ) : image ? (
-          /* inset-0 rather than the reference's bare `absolute`: without it the
-             image starts at its static position below the label strip and its
-             bottom is clipped by exactly the strip's height. */
+        ) : bleeds && image ? (
           <a
             href={href}
             {...linkAttrs}
-            class:list={['absolute inset-0 -z-10 block', external && 'cursor-alias']}
+            class:list={['absolute inset-x-0 -z-10 block', external && 'cursor-alias']}
+            style={`top: ${imageBleedTop}px`}
             tabindex="-1"
             aria-hidden="true"
           >
@@ -136,7 +179,35 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
               alt={imageAlt ?? title}
               loading="lazy"
               decoding="async"
-              class="h-full w-full object-contain transition-transform group-hover:scale-105"
+              style={`width: ${imageBleed}%`}
+              class="mx-auto block h-auto origin-top transition-transform group-hover:scale-105"
+            />
+          </a>
+        ) : image ? (
+          /* inset-0 rather than the reference's bare `absolute`: without it the
+             image starts at its static position below the label strip and its
+             bottom is clipped by exactly the strip's height. */
+          <a
+            href={href}
+            {...linkAttrs}
+            class:list={[
+              'absolute inset-x-0 bottom-0 -z-10 block',
+              clearsLabel ? 'top-10' : 'top-0',
+              external && 'cursor-alias',
+            ]}
+            tabindex="-1"
+            aria-hidden="true"
+          >
+            <img
+              src={asset(image)}
+              alt={imageAlt ?? title}
+              loading="lazy"
+              decoding="async"
+              class:list={[
+                'h-full w-full transition-transform group-hover:scale-105',
+                fitClass,
+                anchorClass,
+              ]}
             />
           </a>
         ) : (
@@ -144,6 +215,25 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
             <p class="font-serif text-xl leading-tight font-light text-neutral-900">{title}</p>
             {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
           </div>
+        )
+      }
+
+      {
+        credit && (
+          <p class="pointer-events-none absolute right-2 bottom-1.5 text-[10px] leading-none tracking-tight text-neutral-400">
+            {creditHref ? (
+              <a
+                href={creditHref}
+                target="_blank"
+                rel="noreferrer"
+                class="pointer-events-auto cursor-alias rounded transition-colors hover:text-neutral-900 hover:underline focus-visible:ring-4 focus-visible:ring-blue-200"
+              >
+                {credit}
+              </a>
+            ) : (
+              credit
+            )}
+          </p>
         )
       }
     </div>

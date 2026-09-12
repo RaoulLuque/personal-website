@@ -5,6 +5,12 @@ export interface Project {
   href?: string;
   wide?: boolean;
   split?: boolean;
+  imageFit?: 'contain' | 'cover';
+  imageAnchor?: 'top' | 'center' | 'bottom';
+  imageBleed?: number;
+  imageBleedTop?: number;
+  imageBleedLeft?: number;
+  imageBleedCenter?: boolean;
   credit?: string;
   creditHref?: string;
   year?: number;
@@ -35,6 +41,12 @@ export interface Course {
   href?: string;
   image?: string;
   wide?: boolean;
+  imageFit?: 'contain' | 'cover';
+  imageAnchor?: 'top' | 'center' | 'bottom';
+  imageBleed?: number;
+  imageBleedTop?: number;
+  imageBleedLeft?: number;
+  imageBleedCenter?: boolean;
   credit?: string;
   creditHref?: string;
 }

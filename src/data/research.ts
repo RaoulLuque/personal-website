@@ -2,16 +2,15 @@ import type { Paper } from '../lib/types';
 
 export const papers: Paper[] = [
   {
-    title: 'A Placeholder Title for Your First Paper',
-    authors: ['Raoul Luque', 'A. Coauthor', 'B. Advisor'],
-    venue: 'Conference on Something 2026',
+    title: '',
+    authors: ['Raoul Luqué'],
+    venue: 'Supervised by Prof. Arie Koster',
     year: 2026,
-    note: 'Oral',
-    figure: 'images/placeholder-wide.svg',
+    note: 'Bachelor Thesis',
+    figure: 'images/bachelor-thesis.png',
     links: {
-      pdf: 'https://example.com/paper.pdf',
-      arxiv: 'https://arxiv.org/',
-      code: 'https://github.com/raoulluque',
+      pdf: 'https://github.com/RaoulLuque/treewidth-heuristic-using-clique-graphs/blob/main/Bachelor_Thesis.pdf',
+      code: 'https://github.com/RaoulLuque/treewidth-heuristic-using-clique-graphs',
     },
   },
   {
