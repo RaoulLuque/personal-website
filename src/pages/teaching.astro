@@ -24,6 +24,8 @@ import { courses } from '../data/teaching';
             .filter(Boolean)
             .join(' · ')}
           wide={course.wide}
+          credit={course.credit}
+          creditHref={course.creditHref}
           index={i}
         />
       ))

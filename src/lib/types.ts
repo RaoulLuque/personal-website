@@ -5,6 +5,8 @@ export interface Project {
   href?: string;
   wide?: boolean;
   split?: boolean;
+  credit?: string;
+  creditHref?: string;
   year?: number;
 }
 
@@ -33,4 +35,6 @@ export interface Course {
   href?: string;
   image?: string;
   wide?: boolean;
+  credit?: string;
+  creditHref?: string;
 }

@@ -12,6 +12,8 @@ interface Props {
   blurb?: string;
   wide?: boolean;
   split?: boolean;
+  credit?: string;
+  creditHref?: string;
   index?: number;
   class?: string;
 }
@@ -27,6 +29,8 @@ const {
   blurb,
   wide = false,
   split = false,
+  credit,
+  creditHref,
   index = 0,
   class: className,
 } = Astro.props;
