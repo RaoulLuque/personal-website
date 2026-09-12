@@ -3,6 +3,8 @@ export interface Project {
   blurb?: string;
   image?: string;
   href?: string;
+  githubHref?: string;
+  imageHref?: string;
   wide?: boolean;
   split?: boolean;
   imageFit?: 'contain' | 'cover';
@@ -45,6 +47,8 @@ export interface Course {
   institution?: string;
   blurb?: string;
   href?: string;
+  githubHref?: string;
+  imageHref?: string;
   image?: string;
   wide?: boolean;
   imageFit?: 'contain' | 'cover';

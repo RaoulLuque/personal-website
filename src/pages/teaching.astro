@@ -19,6 +19,8 @@ import { courses } from '../data/teaching';
           label={course.term}
           title={course.title}
           href={course.href}
+          githubHref={course.githubHref}
+          imageHref={course.imageHref}
           image={course.image}
           blurb={[course.role, course.institution, course.blurb]
             .filter(Boolean)

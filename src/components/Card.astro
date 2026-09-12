@@ -7,6 +7,8 @@ interface Props {
   label?: string;
   title: string;
   href?: string;
+  githubHref?: string;
+  imageHref?: string;
   image?: string;
   imageAlt?: string;
   blurb?: string;
@@ -30,6 +32,8 @@ const {
   label,
   title,
   href,
+  githubHref,
+  imageHref,
   image,
   imageAlt,
   blurb,
@@ -54,8 +58,16 @@ const clearsLabel = imageAnchor !== 'center';
 const bleeds = typeof imageBleed === 'number';
 const bleedGutter = imageBleedLeft + (imageBleedCenter ? imageBleedLeft : 16);
 
-const external = !!href && /^https?:/.test(href);
-const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
+const isExternal = (url?: string) => !!url && /^https?:/.test(url);
+const attrsFor = (url?: string) =>
+  isExternal(url) ? { target: '_blank', rel: 'noreferrer' } : {};
+
+const imageLink = imageHref ?? href ?? githubHref;
+const external = isExternal(imageLink);
+const linkAttrs = attrsFor(imageLink);
+
+const iconClass =
+  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200';
 ---
 
 <div
@@ -88,39 +100,52 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
           }
           {' · '}{label ?? title}
         </span>
-        {
-          href && (
-            <a
-              href={href}
-              {...linkAttrs}
-              aria-label={title}
-              class:list={[
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200',
-                external && 'cursor-alias',
-              ]}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                class="h-4 w-4"
-                aria-hidden="true"
+        <span class="flex shrink-0 items-center">
+          {
+            githubHref && (
+              <a
+                href={githubHref}
+                {...attrsFor(githubHref)}
+                aria-label={`${title} on GitHub`}
+                class:list={[iconClass, isExternal(githubHref) && 'cursor-alias']}
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
-                  clip-rule="evenodd"></path>
-              </svg>
-            </a>
-          )
-        }
+                <svg viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4" aria-hidden="true">
+                  <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
+                </svg>
+              </a>
+            )
+          }
+          {
+            href && (
+              <a
+                href={href}
+                {...attrsFor(href)}
+                aria-label={title}
+                class:list={[iconClass, isExternal(href) && 'cursor-alias']}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-4 w-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                    clip-rule="evenodd"></path>
+                </svg>
+              </a>
+            )
+          }
+        </span>
       </div>
 
       {
         split && image && bleeds ? (
           <>
             <a
-              href={href}
+              href={imageLink}
               {...linkAttrs}
               class:list={['absolute left-0 -z-10 block', external && 'cursor-alias']}
               style={`top: ${imageBleedTop}px; left: ${imageBleedLeft}px; width: ${imageBleed}%`}
@@ -146,7 +171,7 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
         ) : split && image ? (
           <div class="absolute inset-0 top-10 flex items-center gap-4 p-4 sm:gap-6">
             <a
-              href={href}
+              href={imageLink}
               {...linkAttrs}
               class:list={['h-full w-2/5 shrink-0', external && 'cursor-alias']}
               tabindex="-1"
@@ -167,7 +192,7 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
           </div>
         ) : bleeds && image ? (
           <a
-            href={href}
+            href={imageLink}
             {...linkAttrs}
             class:list={['absolute inset-x-0 -z-10 block', external && 'cursor-alias']}
             style={`top: ${imageBleedTop}px`}
@@ -188,7 +213,7 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
              image starts at its static position below the label strip and its
              bottom is clipped by exactly the strip's height. */
           <a
-            href={href}
+            href={imageLink}
             {...linkAttrs}
             class:list={[
               'absolute inset-x-0 bottom-0 -z-10 block',
