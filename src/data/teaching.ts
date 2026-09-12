@@ -2,12 +2,12 @@ import type { Course } from '../lib/types';
 
 export const courses: Course[] = [
   {
-    title: 'Placeholder Course',
+    title: 'Combinatorial Optimization (Opti B)',
     role: 'Teaching Assistant',
-    term: 'Winter 2025/26',
+    term: 'Winter 2026/27',
     institution: 'RWTH Aachen University',
     blurb: 'Exercise sessions and grading for roughly 120 students.',
-    wide: true,
+    wide: false,
   },
   {
     title: 'Another Placeholder Course',

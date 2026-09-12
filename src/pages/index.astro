@@ -7,10 +7,6 @@ import { papers } from '../data/research';
 import { projects } from '../data/projects';
 import { courses } from '../data/teaching';
 
-// The landing must fit one screen on desktop, which fixes the card budget:
-// the intro spans 2 columns and 2 rows, leaving 2 cells at `lg` (3 columns)
-// and 4 at `xl` (4 columns). So we show four, and hide the last two at `lg`.
-// Adding a fifth here WILL reintroduce a scrollbar — see CLAUDE.md.
 const paper = papers[0];
 const featured = [
   {

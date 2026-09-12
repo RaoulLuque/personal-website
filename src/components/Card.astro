@@ -11,6 +11,7 @@ interface Props {
   imageAlt?: string;
   blurb?: string;
   wide?: boolean;
+  split?: boolean;
   index?: number;
   class?: string;
 }
@@ -25,6 +26,7 @@ const {
   imageAlt,
   blurb,
   wide = false,
+  split = false,
   index = 0,
   class: className,
 } = Astro.props;
@@ -92,7 +94,29 @@ const linkAttrs = external ? { target: '_blank', rel: 'noreferrer' } : {};
       </div>
 
       {
-        image ? (
+        split && image ? (
+          <div class="absolute inset-0 top-10 flex items-center gap-4 p-4 sm:gap-6">
+            <a
+              href={href}
+              {...linkAttrs}
+              class:list={['h-full w-2/5 shrink-0', external && 'cursor-alias']}
+              tabindex="-1"
+              aria-hidden="true"
+            >
+              <img
+                src={asset(image)}
+                alt={imageAlt ?? title}
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-contain transition-transform group-hover:scale-105"
+              />
+            </a>
+            <div class="flex min-w-0 flex-1 flex-col">
+              <p class="font-serif text-2xl leading-tight font-light text-neutral-900">{title}</p>
+              {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
+            </div>
+          </div>
+        ) : image ? (
           /* inset-0 rather than the reference's bare `absolute`: without it the
              image starts at its static position below the label strip and its
              bottom is clipped by exactly the strip's height. */

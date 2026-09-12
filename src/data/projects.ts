@@ -2,6 +2,14 @@ import type { Project } from '../lib/types';
 
 export const projects: Project[] = [
   {
+    title: 'petgraph',
+    blurb: 'Graph data structures and algorithms for Rust that I lead maintain.',
+    href: 'https://github.com/petgraph/petgraph',
+    image: 'images/petgraph-logo.png',
+    wide: true,
+    split: true,
+  },
+  {
     title: 'Placeholder Project One',
     blurb: 'A short line about what it is and why you built it.',
     href: 'https://github.com/raoulluque',

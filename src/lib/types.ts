@@ -4,6 +4,7 @@ export interface Project {
   image?: string;
   href?: string;
   wide?: boolean;
+  split?: boolean;
   year?: number;
 }
 
