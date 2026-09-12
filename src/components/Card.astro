@@ -9,6 +9,9 @@ interface Props {
   href?: string;
   githubHref?: string;
   imageHref?: string;
+  imageBorder?: string;
+  imageBorderWidth?: number;
+  imageBorderRadius?: number;
   image?: string;
   imageAlt?: string;
   blurb?: string;
@@ -34,6 +37,9 @@ const {
   href,
   githubHref,
   imageHref,
+  imageBorder,
+  imageBorderWidth = 1,
+  imageBorderRadius = 6,
   image,
   imageAlt,
   blurb,
@@ -65,6 +71,10 @@ const attrsFor = (url?: string) =>
 const imageLink = imageHref ?? href ?? githubHref;
 const external = isExternal(imageLink);
 const linkAttrs = attrsFor(imageLink);
+
+const imageBorderStyle = imageBorder
+  ? `border: ${imageBorderWidth}px solid ${imageBorder}; border-radius: ${imageBorderRadius}px`
+  : undefined;
 
 const iconClass =
   'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200';
@@ -157,6 +167,7 @@ const iconClass =
                 alt={imageAlt ?? title}
                 loading="lazy"
                 decoding="async"
+                style={imageBorderStyle}
                 class="block h-auto w-full origin-top transition-transform group-hover:scale-105"
               />
             </a>
@@ -182,6 +193,7 @@ const iconClass =
                 alt={imageAlt ?? title}
                 loading="lazy"
                 decoding="async"
+                style={imageBorderStyle}
                 class="h-full w-full object-contain transition-transform group-hover:scale-105"
               />
             </a>
@@ -204,7 +216,7 @@ const iconClass =
               alt={imageAlt ?? title}
               loading="lazy"
               decoding="async"
-              style={`width: ${imageBleed}%`}
+              style={[`width: ${imageBleed}%`, imageBorderStyle].filter(Boolean).join('; ')}
               class="mx-auto block h-auto origin-top transition-transform group-hover:scale-105"
             />
           </a>
@@ -228,6 +240,7 @@ const iconClass =
               alt={imageAlt ?? title}
               loading="lazy"
               decoding="async"
+              style={imageBorderStyle}
               class:list={[
                 'h-full w-full transition-transform group-hover:scale-105',
                 fitClass,

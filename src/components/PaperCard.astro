@@ -17,8 +17,16 @@ const {
   imageBleedLeft = 16,
   imageBleedCenter = false,
   imageBleedMinHeight,
+  imageBorder,
+  imageBorderWidth = 1,
+  imageBorderRadius = 6,
 } = paper;
 const bleeds = typeof imageBleed === 'number' && !!figure;
+
+const imageBorderStyle = imageBorder
+  ? `border: ${imageBorderWidth}px solid ${imageBorder}; border-radius: ${imageBorderRadius}px`
+  : undefined;
+
 const bleedGutter = imageBleedLeft + (imageBleedCenter ? imageBleedLeft : 16);
 
 const minHeight = bleeds && imageBleedMinHeight ? imageBleedMinHeight : undefined;
@@ -129,6 +137,7 @@ const secondary = linkLabels
               alt={`Teaser figure for ${title}`}
               loading="lazy"
               decoding="async"
+              style={imageBorderStyle}
               class="block h-auto w-full origin-top transition-transform group-hover:scale-105"
             />
           </FigureLink>
@@ -159,6 +168,7 @@ const secondary = linkLabels
                   alt={`Teaser figure for ${title}`}
                   loading="lazy"
                   decoding="async"
+                  style={imageBorderStyle}
                   class="h-full w-full object-contain transition-transform group-hover:scale-105"
                 />
               </FigureLink>

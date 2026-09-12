@@ -5,6 +5,9 @@ export interface Project {
   href?: string;
   githubHref?: string;
   imageHref?: string;
+  imageBorder?: string;
+  imageBorderWidth?: number;
+  imageBorderRadius?: number;
   wide?: boolean;
   split?: boolean;
   imageFit?: 'contain' | 'cover';
@@ -31,6 +34,9 @@ export interface Paper {
   imageBleedLeft?: number;
   imageBleedCenter?: boolean;
   imageBleedMinHeight?: number;
+  imageBorder?: string;
+  imageBorderWidth?: number;
+  imageBorderRadius?: number;
   links?: {
     pdf?: string;
     arxiv?: string;
@@ -49,6 +55,9 @@ export interface Course {
   href?: string;
   githubHref?: string;
   imageHref?: string;
+  imageBorder?: string;
+  imageBorderWidth?: number;
+  imageBorderRadius?: number;
   image?: string;
   wide?: boolean;
   imageFit?: 'contain' | 'cover';

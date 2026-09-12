@@ -13,6 +13,7 @@ export const papers: Paper[] = [
     imageBleedTop: 60,
     imageBleedLeft: 50,
     imageBleedMinHeight: 300,
+    imageBorder: '#ffffff',
     imageBleedCenter: true,
     links: {
       pdf: 'https://github.com/RaoulLuque/treewidth-heuristic-using-clique-graphs/blob/main/Bachelor_Thesis.pdf',
