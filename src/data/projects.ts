@@ -46,7 +46,7 @@ export const projects: Project[] = [
     image: 'images/typing-defense.png',
     imageHref: 'https://raoulluque.github.io/typing-defense/',
     imageBorder: '#8a6f4a',
-    imageBorderWidth: 2.5,
+    imageBorderWidth: 3,
     imageBleed: 85,
     imageBleedTop: 75,
     wide: true,
