@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Card from '../components/Card.astro';
-import { href } from '../lib/paths';
+import { asset, href } from '../lib/paths';
 import { papers } from '../data/research';
 import { projects } from '../data/projects';
 import { courses } from '../data/teaching';
@@ -81,11 +81,21 @@ const featurePaper = (p: Paper | undefined, overrides: CardOverrides = {}) =>
     ...overrides,
   };
 
+const cvCard = {
+  category: 'CV',
+  title: 'Curriculum Vitae',
+  image: 'images/profile.jpg',
+  href: asset('cv.pdf'),
+  imageHref: asset('cv.pdf'),
+  reveal: true,
+};
+
 const candidates = [
   featurePaper(papers[0], { 
     imageBleed: 80,
     imageBleedTop: 100,
     split: false, wide: false }),
+  cvCard,
   featureProject(projects[0], {
   }),
   featureCourse(courses[0], {
