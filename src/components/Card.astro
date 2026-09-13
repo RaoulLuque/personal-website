@@ -17,6 +17,8 @@ interface Props {
   blurb?: string;
   wide?: boolean;
   split?: boolean;
+  reveal?: boolean;
+  revealOffset?: number;
   imageFit?: 'contain' | 'cover';
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
@@ -45,6 +47,8 @@ const {
   blurb,
   wide = false,
   split = false,
+  reveal = false,
+  revealOffset = 48,
   imageFit = 'contain',
   imageAnchor = 'center',
   imageBleed,
@@ -152,7 +156,29 @@ const iconClass =
       </div>
 
       {
-        split && image && bleeds ? (
+        reveal && image ? (
+          <a
+            href={imageLink}
+            {...linkAttrs}
+            class:list={[
+              'absolute inset-0 block transition-transform duration-300 ease-out',
+              'group-hover:[transform:translateY(var(--reveal-offset))]',
+              'group-focus-within:[transform:translateY(var(--reveal-offset))]',
+              external && 'cursor-alias',
+            ]}
+            style={`--reveal-offset: ${revealOffset}px`}
+            aria-label={title}
+          >
+            <img
+              src={asset(image)}
+              alt={imageAlt ?? title}
+              loading="lazy"
+              decoding="async"
+              style={imageBorderStyle}
+              class="h-full w-full object-cover"
+            />
+          </a>
+        ) : split && image && bleeds ? (
           <>
             <a
               href={imageLink}

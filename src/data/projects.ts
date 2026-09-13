@@ -29,6 +29,16 @@ export const projects: Project[] = [
     year: 2025,
   },
   {
+    title: 'Connect-Rust',
+    blurb: 'Webserver for playing connect-four against optimal players in Rust.',
+    href: 'https://connect-rust.fly.dev/',
+    githubHref: 'https://github.com/raoulluque/connect-rust',
+    image: 'images/connect-rust.png',
+    imageHref: 'https://connect-rust.fly.dev/',
+    reveal: true,
+    year: 2023,
+  },
+  {
     title: 'Typing Defense',
     blurb: 'A typing defense game written in Rust using the Bevy engine.',
     href: 'https://raoulluque.github.io/typing-defense/',
@@ -42,17 +52,4 @@ export const projects: Project[] = [
     wide: true,
     year: 2024,
   },
-  {
-    title: 'Connect-Rust',
-    blurb: 'Webserver for playing connect-four against optimal players in Rust.',
-    href: 'https://connect-rust.fly.dev/',
-    githubHref: 'https://github.com/raoulluque/connect-rust',
-    image: 'images/connect-rust.png',
-    imageHref: 'https://connect-rust.fly.dev/',
-    imageBorder: '#e5e5e5',
-    imageBleed: 80,
-    imageBleedTop: 100,
-    year: 2023,
-  },
-  
 ];

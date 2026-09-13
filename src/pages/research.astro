@@ -5,9 +5,6 @@ import MailLink from '../components/MailLink.astro';
 import PaperCard from '../components/PaperCard.astro';
 import { papers } from '../data/research';
 
-// Papers carry more text than a project thumbnail, so this page uses its own
-// two-up grid rather than the shared four-column one.
-const sorted = [...papers].sort((a, b) => b.year - a.year);
 ---
 
 <Base title="Research">
@@ -16,6 +13,6 @@ const sorted = [...papers].sort((a, b) => b.year - a.year);
     what you&rsquo;re working on.
   </PageHeader>
   <div class="grid grid-cols-1 pb-8 lg:grid-cols-2">
-    {sorted.map((paper, i) => <PaperCard paper={paper} index={i} />)}
+    {papers.map((paper, i) => <PaperCard paper={paper} index={i} />)}
   </div>
 </Base>

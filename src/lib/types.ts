@@ -10,6 +10,8 @@ export interface Project {
   imageBorderRadius?: number;
   wide?: boolean;
   split?: boolean;
+  reveal?: boolean;
+  revealOffset?: number;
   imageFit?: 'contain' | 'cover';
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
@@ -60,6 +62,8 @@ export interface Course {
   imageBorderRadius?: number;
   image?: string;
   wide?: boolean;
+  reveal?: boolean;
+  revealOffset?: number;
   imageFit?: 'contain' | 'cover';
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
