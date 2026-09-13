@@ -10,8 +10,6 @@ const { label = 'Reach out', subject } = Astro.props;
 const query = subject ? `?subject=${encodeURIComponent(subject)}` : '';
 ---
 
-<!-- Styled like the landing page's inline links: dark text on a coloured
-     underline accent. Each accent colour is used for one idea only. -->
 <a
   href={`mailto:${site.email}${query}`}
   class="cursor-alias rounded text-neutral-900 underline decoration-rose-400 underline-offset-4 transition-colors hover:text-neutral-500 focus-visible:ring-4 focus-visible:ring-blue-200"

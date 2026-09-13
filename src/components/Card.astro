@@ -247,9 +247,6 @@ const iconClass =
             />
           </a>
         ) : image ? (
-          /* inset-0 rather than the reference's bare `absolute`: without it the
-             image starts at its static position below the label strip and its
-             bottom is clipped by exactly the strip's height. */
           <a
             href={imageLink}
             {...linkAttrs}

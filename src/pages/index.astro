@@ -1,52 +1,96 @@
 ---
 import Base from '../layouts/Base.astro';
-import Grid from '../components/Grid.astro';
 import Card from '../components/Card.astro';
 import { href } from '../lib/paths';
 import { papers } from '../data/research';
 import { projects } from '../data/projects';
 import { courses } from '../data/teaching';
 
-const paper = papers[0];
-const featured = [
-  {
-    category: 'Research',
-    categoryHref: href('research'),
-    label: paper?.venue,
-    title: paper?.title ?? '',
-    image: paper?.figure,
-    href: paper?.links?.pdf ?? paper?.links?.arxiv,
-  },
-  {
+import type { Course, Paper, Project } from '../lib/types';
+
+const cardProps = (e: Project & Course) => ({
+  title: e.title,
+  blurb: e.blurb,
+  image: e.image,
+  href: e.href,
+  githubHref: e.githubHref,
+  imageHref: e.imageHref,
+  wide: e.wide,
+  split: e.split,
+  reveal: e.reveal,
+  revealOffset: e.revealOffset,
+  imageFit: e.imageFit,
+  imageAnchor: e.imageAnchor,
+  imageBleed: e.imageBleed,
+  imageBleedTop: e.imageBleedTop,
+  imageBleedLeft: e.imageBleedLeft,
+  imageBleedCenter: e.imageBleedCenter,
+  imageBorder: e.imageBorder,
+  imageBorderWidth: e.imageBorderWidth,
+  imageBorderRadius: e.imageBorderRadius,
+  credit: e.credit,
+  creditHref: e.creditHref,
+});
+
+const paperProps = (p: Paper) => ({
+  label: p.venue,
+  title: p.title,
+  image: p.figure,
+  href: p.links?.pdf ?? p.links?.arxiv ?? p.links?.project,
+  githubHref: /^https?:\/\/(www\.)?github\.com\//.test(p.links?.code ?? '')
+    ? p.links?.code
+    : undefined,
+  imageHref: p.figureHref,
+  imageBleed: p.imageBleed,
+  imageBleedTop: p.imageBleedTop,
+  imageBleedLeft: p.imageBleedLeft,
+  imageBleedCenter: p.imageBleedCenter,
+  imageBorder: p.imageBorder,
+  imageBorderWidth: p.imageBorderWidth,
+  imageBorderRadius: p.imageBorderRadius,
+});
+
+const candidates = [
+  papers[0] && { category: 'Research', categoryHref: href('research'), ...paperProps(papers[0]) },
+  projects[0] && {
     category: 'Projects',
     categoryHref: href('projects'),
-    title: projects[0]?.title ?? '',
-    image: projects[0]?.image,
-    href: projects[0]?.href,
+    ...cardProps(projects[0] as Project & Course),
   },
-  {
+  projects[1] && {
     category: 'Projects',
     categoryHref: href('projects'),
-    title: projects[1]?.title ?? '',
-    image: projects[1]?.image,
-    href: projects[1]?.href,
+    ...cardProps(projects[1] as Project & Course),
   },
-  {
+  courses[0] && {
     category: 'Teaching',
     categoryHref: href('teaching'),
-    label: courses[0]?.term,
-    title: courses[0]?.title ?? '',
-    href: courses[0]?.href ?? href('teaching'),
+    label: courses[0].term,
+    ...cardProps(courses[0] as Project & Course),
   },
-].filter((card) => card.title);
+].filter((c) => c && c.title) as Array<Record<string, unknown> & { wide?: boolean }>;
+
+const FREE_PER_ROW = 2;
+const rowsFree = [FREE_PER_ROW, FREE_PER_ROW];
+const placed: Array<{ card: (typeof candidates)[number]; row: number }> = [];
+
+for (const card of candidates) {
+  const cost = card.wide ? 2 : 1;
+  const row = rowsFree.findIndex((free) => free >= cost);
+  if (row === -1) continue;
+  rowsFree[row] -= cost;
+  placed.push({ card, row });
+}
+
+const featured = placed.sort((a, b) => a.row - b.row).map((p) => p.card);
 ---
 
 <Base fullscreen>
-  <Grid class="pb-8 lg:min-h-0 lg:flex-1 lg:grid-rows-2 lg:pb-0">
+  <div
+    class="grid grid-cols-1 gap-0 pb-8 sm:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-4 lg:grid-rows-2 lg:pb-0"
+  >
     <div class="row-span-2 px-1 pb-2 sm:col-span-2 lg:min-h-0">
       <div class="flex h-full w-full items-center p-4 sm:p-8">
-        <!-- Edit this prose directly. Emphasised words are text-neutral-900 with
-             a decoration-* accent; keep each accent colour distinct. -->
         <h1
           class="font-serif text-2xl leading-tight! font-light text-neutral-400 sm:text-3xl lg:text-4xl"
         >
@@ -96,16 +140,11 @@ const featured = [
     {
       featured.map((card, i) => (
         <Card
-          category={card.category}
-          categoryHref={card.categoryHref}
-          label={card.label}
-          title={card.title}
-          href={card.href}
-          image={card.image}
+          {...(card as any)}
           index={i + 1}
-          class={i >= 2 ? 'lg:hidden xl:block lg:aspect-auto lg:min-h-0' : 'lg:aspect-auto lg:min-h-0'}
+          class="lg:aspect-auto lg:min-h-0"
         />
       ))
     }
-  </Grid>
+  </div>
 </Base>
