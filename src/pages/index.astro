@@ -50,24 +50,46 @@ const paperProps = (p: Paper) => ({
   imageBorderRadius: p.imageBorderRadius,
 });
 
-const candidates = [
-  papers[0] && { category: 'Research', categoryHref: href('research'), ...paperProps(papers[0]) },
-  projects[0] && {
+type CardOverrides = Partial<ReturnType<typeof cardProps>> & {
+  label?: string;
+  category?: string;
+  categoryHref?: string;
+};
+
+const featureProject = (p: Project | undefined, overrides: CardOverrides = {}) =>
+  p && {
     category: 'Projects',
     categoryHref: href('projects'),
-    ...cardProps(projects[0] as Project & Course),
-  },
-  projects[1] && {
-    category: 'Projects',
-    categoryHref: href('projects'),
-    ...cardProps(projects[1] as Project & Course),
-  },
-  courses[0] && {
+    ...cardProps(p as Project & Course),
+    ...overrides,
+  };
+
+const featureCourse = (c: Course | undefined, overrides: CardOverrides = {}) =>
+  c && {
     category: 'Teaching',
     categoryHref: href('teaching'),
-    label: courses[0].term,
-    ...cardProps(courses[0] as Project & Course),
-  },
+    label: c.term,
+    ...cardProps(c as Project & Course),
+    ...overrides,
+  };
+
+const featurePaper = (p: Paper | undefined, overrides: CardOverrides = {}) =>
+  p && {
+    category: 'Research',
+    categoryHref: href('research'),
+    ...paperProps(p),
+    ...overrides,
+  };
+
+const candidates = [
+  featurePaper(papers[0], { 
+    imageBleed: 80,
+    imageBleedTop: 100,
+    split: false, wide: false }),
+  featureProject(projects[0], {
+  }),
+  featureCourse(courses[0], {
+  }),
 ].filter((c) => c && c.title) as Array<Record<string, unknown> & { wide?: boolean }>;
 
 const FREE_PER_ROW = 2;
