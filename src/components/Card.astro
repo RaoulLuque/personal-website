@@ -23,6 +23,7 @@ interface Props {
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
   imageBleedTop?: number;
+  imageBleedBottom?: number;
   imageBleedLeft?: number;
   imageBleedCenter?: boolean;
   credit?: string;
@@ -53,6 +54,7 @@ const {
   imageAnchor = 'center',
   imageBleed,
   imageBleedTop = 40,
+  imageBleedBottom,
   imageBleedLeft = 16,
   imageBleedCenter = false,
   credit,
@@ -67,6 +69,13 @@ const clearsLabel = imageAnchor !== 'center';
 
 const bleeds = typeof imageBleed === 'number';
 const bleedGutter = imageBleedLeft + (imageBleedCenter ? imageBleedLeft : 16);
+const bleedTopCss = `min(${imageBleedTop}px, 22%)`;
+const bleedLeftCss = `min(${imageBleedLeft}px, 8%)`;
+const bleedGutterCss = `min(${bleedGutter}px, 16%)`;
+const bleedsToBottom = typeof imageBleedBottom === 'number';
+const bleedAnchorStyle = bleedsToBottom
+  ? `bottom: ${-imageBleedBottom}px`
+  : `top: ${bleedTopCss}`;
 
 const isExternal = (url?: string) => !!url && /^https?:/.test(url);
 const attrsFor = (url?: string) =>
@@ -80,6 +89,10 @@ const imageBorderStyle = imageBorder
   ? `border: ${imageBorderWidth}px solid ${imageBorder}; border-radius: ${imageBorderRadius}px`
   : undefined;
 
+const bleedImgStyle = [`width: ${imageBleed}%`, imageBorderStyle]
+  .filter(Boolean)
+  .join('; ');
+
 const iconClass =
   'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200';
 ---
@@ -87,7 +100,7 @@ const iconClass =
 <div
   class:list={[
     'px-1 pb-2',
-    wide ? 'aspect-[2] sm:col-span-2' : 'aspect-square',
+    wide && split ? 'aspect-square sm:col-span-2 sm:aspect-[2]' : wide ? 'aspect-[2] sm:col-span-2' : 'aspect-square',
     className,
   ]}
 >
@@ -184,7 +197,7 @@ const iconClass =
               href={imageLink}
               {...linkAttrs}
               class:list={['absolute left-0 -z-10 block', external && 'cursor-alias']}
-              style={`top: ${imageBleedTop}px; left: ${imageBleedLeft}px; width: ${imageBleed}%`}
+              style={`top: ${bleedTopCss}; left: ${bleedLeftCss}; width: ${imageBleed}%`}
               tabindex="-1"
               aria-hidden="true"
             >
@@ -199,7 +212,7 @@ const iconClass =
             </a>
             <div
               class="absolute inset-y-0 right-0 flex flex-col justify-center py-4 pr-4"
-              style={`left: calc(${imageBleed}% + ${bleedGutter}px)`}
+              style={`left: calc(${imageBleed}% + ${bleedGutterCss})`}
             >
               <p class="font-serif text-2xl leading-tight font-light text-neutral-900">{title}</p>
               {blurb && <p class="mt-2 text-sm tracking-tight text-neutral-400">{blurb}</p>}
@@ -233,7 +246,7 @@ const iconClass =
             href={imageLink}
             {...linkAttrs}
             class:list={['absolute inset-x-0 -z-10 block', external && 'cursor-alias']}
-            style={`top: ${imageBleedTop}px`}
+            style={bleedAnchorStyle}
             tabindex="-1"
             aria-hidden="true"
           >
@@ -242,8 +255,11 @@ const iconClass =
               alt={imageAlt ?? title}
               loading="lazy"
               decoding="async"
-              style={[`width: ${imageBleed}%`, imageBorderStyle].filter(Boolean).join('; ')}
-              class="mx-auto block h-auto origin-top transition-transform group-hover:scale-105"
+              style={bleedImgStyle}
+              class:list={[
+                'mx-auto block h-auto transition-transform group-hover:scale-105',
+                bleedsToBottom ? 'origin-bottom' : 'origin-top',
+              ]}
             />
           </a>
         ) : image ? (

@@ -16,6 +16,7 @@ export interface Project {
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
   imageBleedTop?: number;
+  imageBleedBottom?: number;
   imageBleedLeft?: number;
   imageBleedCenter?: boolean;
   credit?: string;
@@ -33,6 +34,7 @@ export interface Paper {
   figureHref?: string;
   imageBleed?: number;
   imageBleedTop?: number;
+  imageBleedBottom?: number;
   imageBleedLeft?: number;
   imageBleedCenter?: boolean;
   imageBleedMinHeight?: number;
@@ -68,6 +70,7 @@ export interface Course {
   imageAnchor?: 'top' | 'center' | 'bottom';
   imageBleed?: number;
   imageBleedTop?: number;
+  imageBleedBottom?: number;
   imageBleedLeft?: number;
   imageBleedCenter?: boolean;
   credit?: string;

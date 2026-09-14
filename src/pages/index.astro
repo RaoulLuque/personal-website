@@ -23,6 +23,7 @@ const cardProps = (e: Project & Course) => ({
   imageAnchor: e.imageAnchor,
   imageBleed: e.imageBleed,
   imageBleedTop: e.imageBleedTop,
+  imageBleedBottom: e.imageBleedBottom,
   imageBleedLeft: e.imageBleedLeft,
   imageBleedCenter: e.imageBleedCenter,
   imageBorder: e.imageBorder,
@@ -43,6 +44,7 @@ const paperProps = (p: Paper) => ({
   imageHref: p.figureHref,
   imageBleed: p.imageBleed,
   imageBleedTop: p.imageBleedTop,
+  imageBleedBottom: p.imageBleedBottom,
   imageBleedLeft: p.imageBleedLeft,
   imageBleedCenter: p.imageBleedCenter,
   imageBorder: p.imageBorder,
@@ -91,10 +93,13 @@ const cvCard = {
 };
 
 const candidates = [
-  featurePaper(papers[0], { 
-    imageBleed: 80,
+featurePaper(papers[0], {
+    imageBleed: 70,
     imageBleedTop: 100,
-    split: false, wide: false }),
+    imageBleedBottom: 20,
+    split: false,
+    wide: false,
+  }),
   cvCard,
   featureProject(projects[0], {
   }),
@@ -122,7 +127,7 @@ const featured = placed.sort((a, b) => a.row - b.row).map((p) => p.card);
     <div class="row-span-2 px-1 pb-2 sm:col-span-2 lg:min-h-0">
       <div class="flex h-full w-full items-center p-4 sm:p-8">
         <h1
-          class="font-serif text-2xl leading-tight! font-light text-neutral-400 sm:text-3xl lg:text-4xl"
+          class="font-serif text-2xl leading-tight! font-light text-neutral-400 sm:text-3xl lg:text-4xl 2xl:text-5xl"
         >
           Hi there, I&rsquo;m <span class="text-neutral-900">Raoul</span> 👋 A mathematics PhD
           student at <a
