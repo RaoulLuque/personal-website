@@ -78,7 +78,7 @@ const bleedAnchorStyle = bleedsToBottom
   : `--bleed-top: ${bleedTopCss}`;
 const bleedAnchorClass = bleedsToBottom
   ? ''
-  : 'top-1/2 -translate-y-1/2 sm:translate-y-0 sm:[top:var(--bleed-top)]';
+  : 'top-10 bottom-0 flex justify-center [align-items:safe_center] sm:block sm:bottom-auto sm:[top:var(--bleed-top)]';
 
 const isExternal = (url?: string) => !!url && /^https?:/.test(url);
 const attrsFor = (url?: string) =>
@@ -200,7 +200,7 @@ const iconClass =
               href={imageLink}
               {...linkAttrs}
               class:list={[
-                'absolute -z-10 block top-1/2 -translate-y-1/2 sm:translate-y-0 sm:[top:var(--bleed-top)]',
+                'absolute -z-10 top-10 bottom-0 flex [align-items:safe_center] sm:block sm:bottom-auto sm:[top:var(--bleed-top)]',
                 external && 'cursor-alias',
               ]}
               style={`--bleed-top: ${bleedTopCss}; left: ${bleedLeftCss}; width: ${imageBleed}%`}
