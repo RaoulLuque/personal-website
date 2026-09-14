@@ -75,7 +75,10 @@ const bleedGutterCss = `min(${bleedGutter}px, 16%)`;
 const bleedsToBottom = typeof imageBleedBottom === 'number';
 const bleedAnchorStyle = bleedsToBottom
   ? `bottom: ${-imageBleedBottom}px`
-  : `top: ${bleedTopCss}`;
+  : `--bleed-top: ${bleedTopCss}`;
+const bleedAnchorClass = bleedsToBottom
+  ? ''
+  : 'top-1/2 -translate-y-1/2 sm:translate-y-0 sm:[top:var(--bleed-top)]';
 
 const isExternal = (url?: string) => !!url && /^https?:/.test(url);
 const attrsFor = (url?: string) =>
@@ -196,8 +199,11 @@ const iconClass =
             <a
               href={imageLink}
               {...linkAttrs}
-              class:list={['absolute left-0 -z-10 block', external && 'cursor-alias']}
-              style={`top: ${bleedTopCss}; left: ${bleedLeftCss}; width: ${imageBleed}%`}
+              class:list={[
+                'absolute -z-10 block top-1/2 -translate-y-1/2 sm:translate-y-0 sm:[top:var(--bleed-top)]',
+                external && 'cursor-alias',
+              ]}
+              style={`--bleed-top: ${bleedTopCss}; left: ${bleedLeftCss}; width: ${imageBleed}%`}
               tabindex="-1"
               aria-hidden="true"
             >
@@ -245,7 +251,11 @@ const iconClass =
           <a
             href={imageLink}
             {...linkAttrs}
-            class:list={['absolute inset-x-0 -z-10 block', external && 'cursor-alias']}
+            class:list={[
+              'absolute inset-x-0 -z-10 block',
+              bleedAnchorClass,
+              external && 'cursor-alias',
+            ]}
             style={bleedAnchorStyle}
             tabindex="-1"
             aria-hidden="true"
