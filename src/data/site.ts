@@ -18,5 +18,6 @@ export const nav = [
   { label: 'Raoul', path: '/' },
   { label: 'Projects', path: 'projects' },
   { label: 'Research', path: 'research' },
+  { label: 'Talks', path: 'talks' },
   { label: 'Teaching', path: 'teaching' },
 ] as const;

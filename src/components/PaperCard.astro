@@ -5,11 +5,12 @@ import { asset } from '../lib/paths';
 
 interface Props {
   paper: Paper;
+  category?: string;
   index?: number;
 }
 
-const { paper, index = 0 } = Astro.props;
-const { title, authors, venue, year, note, figure, figureHref, links = {} } = paper;
+const { paper, category = 'Research', index = 0 } = Astro.props;
+const { title, authors, venue, venueHref, year, note, figure, figureHref, links = {} } = paper;
 
 const {
   imageBleed,
@@ -35,7 +36,8 @@ const githubLink = /^https?:\/\/(www\.)?github\.com\//.test(links.code ?? '')
   ? links.code
   : undefined;
 
-const primary = links.pdf ?? links.arxiv ?? links.project ?? (githubLink ? undefined : links.code);
+const primary =
+  links.pdf ?? links.slides ?? links.arxiv ?? links.video ?? links.project ?? (githubLink ? undefined : links.code);
 
 const figureLink = figureHref ?? primary ?? githubLink;
 const figureDuplicatesArrow = figureLink === primary;
@@ -54,6 +56,8 @@ const FigureLink = figureLink ? 'a' : 'div';
 const linkLabels: Array<[keyof typeof links, string]> = [
   ['pdf', 'PDF'],
   ['arxiv', 'arXiv'],
+  ['slides', 'Slides'],
+  ['video', 'Video'],
   ['code', 'Code'],
   ['project', 'Project'],
   ['bibtex', 'BibTeX'],
@@ -80,7 +84,7 @@ const secondary = linkLabels
       <div
         class="flex items-center justify-between pt-2 pr-2 pl-4 text-sm tracking-tight text-neutral-400"
       >
-        <span class="min-w-0 truncate py-1.5">Research · {year}</span>
+        <span class="min-w-0 truncate py-1.5">{category} · {year}</span>
         <span class="flex shrink-0 items-center">
         {
           githubLink && (
@@ -197,7 +201,20 @@ const secondary = linkLabels
           </p>
 
           <p class="mt-1 text-sm tracking-tight text-neutral-400">
-            {venue}{note && <span class="text-neutral-900"> · {note}</span>}
+            {
+              venueHref ? (
+                <a
+                  href={venueHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="cursor-alias rounded underline decoration-neutral-300 underline-offset-2 transition-colors hover:text-neutral-900"
+                >
+                  {venue}
+                </a>
+              ) : (
+                venue
+              )
+            }{note && <span class="text-neutral-900"> · {note}</span>}
           </p>
 
           {

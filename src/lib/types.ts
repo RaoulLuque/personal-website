@@ -28,6 +28,7 @@ export interface Paper {
   title: string;
   authors: string[];
   venue: string;
+  venueHref?: string;
   year: number;
   note?: string;
   figure?: string;
@@ -44,11 +45,15 @@ export interface Paper {
   links?: {
     pdf?: string;
     arxiv?: string;
+    slides?: string;
+    video?: string;
     code?: string;
     bibtex?: string;
     project?: string;
   };
 }
+
+export type Talk = Paper;
 
 export interface Course {
   title: string;

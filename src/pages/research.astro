@@ -9,8 +9,7 @@ import { papers } from '../data/research';
 
 <Base title="Research">
   <PageHeader heading="Research">
-    Papers and preprints. <MailLink subject="Your research" /> if anything here is relevant to
-    what you&rsquo;re working on.
+    Papers and preprints. <MailLink subject="Your research" /> if anything here interests you.
   </PageHeader>
   <div class="grid grid-cols-1 pb-8 lg:grid-cols-2">
     {papers.map((paper, i) => <PaperCard paper={paper} index={i} />)}

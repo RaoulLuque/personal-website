@@ -4,7 +4,6 @@ import Card from '../components/Card.astro';
 import { asset, href } from '../lib/paths';
 import { papers } from '../data/research';
 import { projects } from '../data/projects';
-import { courses } from '../data/teaching';
 
 import type { Course, Paper, Project } from '../lib/types';
 
@@ -63,15 +62,6 @@ const featureProject = (p: Project | undefined, overrides: CardOverrides = {}) =
     category: 'Projects',
     categoryHref: href('projects'),
     ...cardProps(p as Project & Course),
-    ...overrides,
-  };
-
-const featureCourse = (c: Course | undefined, overrides: CardOverrides = {}) =>
-  c && {
-    category: 'Teaching',
-    categoryHref: href('teaching'),
-    label: c.term,
-    ...cardProps(c as Project & Course),
     ...overrides,
   };
 
