@@ -38,5 +38,33 @@ const pageTitle = title ? `${site.title} | ${title}` : site.title;
       <Nav />
       <slot />
     </main>
+
+    {/*
+      The only JavaScript on the site. CSS :active cannot express the card press:
+      browsers revoke it the moment a touch turns into a scroll, so a card would
+      snap back the instant you dragged away from it. touchend fires only when the
+      finger actually lifts, so this holds the state through a scroll. Inline and
+      listener-only — no bundle, no hydration, nothing to load.
+    */}
+    <script is:inline>
+      (() => {
+        let pressed = null;
+        const release = () => {
+          if (!pressed) return;
+          pressed.classList.remove('is-pressed');
+          pressed = null;
+        };
+        // Clearing on touchstart as well as touchend is what self-heals a card
+        // left pressed by a touchcancel we never saw: the next touch resets it.
+        document.addEventListener('touchstart', (e) => {
+          release();
+          const card = e.target instanceof Element && e.target.closest('[data-card]');
+          if (!card) return;
+          pressed = card;
+          card.classList.add('is-pressed');
+        }, { passive: true });
+        document.addEventListener('touchend', release, { passive: true });
+      })();
+    </script>
   </body>
 </html>

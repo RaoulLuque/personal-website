@@ -3,6 +3,32 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/newsreader";
 
+/* Touch devices never fire :hover, so the card interactions mirror themselves
+   onto :active under this variant. Scoped to (hover: none) so a mouse never
+   gets the press state on top of the hover state it already has. */
+@custom-variant touch (@media (hover: none));
+
+/* The pressed state is driven by JS (see Base.astro), not by :active. Browsers
+   revoke :active the instant a touch becomes a scroll, which is exactly the case
+   this has to survive: tap a card, drag to scroll, card stays put until release.
+   Matches the pressed card itself and anything inside it. :is() (not :where())
+   so these outrank the un-suffixed base utilities they override. */
+@custom-variant pressed (&:is(.is-pressed, .is-pressed *));
+
+/* A press target must hold :active for as long as the finger is down. Two browser
+   gestures take it away early: iOS Safari's long-press link preview (the callout)
+   and the text-selection long-press. Both start while the finger is still down, so
+   the card would snap back mid-hold. Suppressing them on touch is what makes the
+   card stay put until release. Scoped to the press targets only — card text stays
+   selectable, and a mouse keeps the normal context menu. */
+@media (hover: none) {
+  .group\/press {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-serif: "Newsreader Variable", ui-serif, Georgia, Cambria, serif;
