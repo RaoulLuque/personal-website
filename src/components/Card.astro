@@ -97,7 +97,7 @@ const bleedImgStyle = [`width: ${imageBleed}%`, imageBorderStyle]
   .join('; ');
 
 const iconClass =
-  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo touch:pressed:bg-white touch:pressed:text-neutral-900 touch:pressed:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200';
+  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors group-hover:bg-white group-hover:text-neutral-900 group-hover:shadow-skeuo touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 group-focus-within:bg-white group-focus-within:text-neutral-900 group-focus-within:shadow-skeuo touch:pressed:bg-white touch:pressed:text-neutral-900 touch:pressed:shadow-skeuo focus-visible:ring-4 focus-visible:ring-blue-200';
 ---
 
 <div
@@ -108,7 +108,7 @@ const iconClass =
   ]}
 >
   <div
-    data-card class="animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 focus-within:bg-neutral-100 hover:bg-neutral-100 touch:pressed:bg-neutral-100"
+    data-card class="animate-fade-up group h-full w-full overflow-hidden rounded-lg bg-neutral-50 transition-colors touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 focus-within:bg-neutral-100 hover:bg-neutral-100 touch:pressed:bg-neutral-100"
     style={`animation-delay: ${index * 60}ms`}
   >
     <div class="relative isolate h-full w-full">
@@ -178,7 +178,7 @@ const iconClass =
             {...linkAttrs}
             class:list={[
               'group/press absolute inset-0 block transition-transform duration-300 ease-out',
-              'touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300',
+              'touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375',
               'group-hover:[transform:translateY(var(--reveal-offset))]',
               'group-focus-within:[transform:translateY(var(--reveal-offset))]',
               'touch:pressed:[transform:translateY(var(--reveal-offset))]',
@@ -215,7 +215,7 @@ const iconClass =
                 loading="lazy"
                 decoding="async"
                 style={imageBorderStyle}
-                class="block h-auto w-full origin-top transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 group-hover:scale-105 touch:pressed:scale-105"
+                class="block h-auto w-full origin-top transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 group-hover:scale-105 touch:pressed:scale-105"
               />
             </a>
             <div
@@ -241,7 +241,7 @@ const iconClass =
                 loading="lazy"
                 decoding="async"
                 style={imageBorderStyle}
-                class="h-full w-full object-contain transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 group-hover:scale-105 touch:pressed:scale-105"
+                class="h-full w-full object-contain transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 group-hover:scale-105 touch:pressed:scale-105"
               />
             </a>
             <div class="flex min-w-0 flex-1 flex-col">
@@ -269,7 +269,7 @@ const iconClass =
               decoding="async"
               style={bleedImgStyle}
               class:list={[
-                'mx-auto block h-auto transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 group-hover:scale-105 touch:pressed:scale-105',
+                'mx-auto block h-auto transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 group-hover:scale-105 touch:pressed:scale-105',
                 bleedsToBottom ? 'origin-bottom' : 'origin-top',
               ]}
             />
@@ -293,7 +293,7 @@ const iconClass =
               decoding="async"
               style={imageBorderStyle}
               class:list={[
-                'h-full w-full transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-300 group-hover:scale-105 touch:pressed:scale-105',
+                'h-full w-full transition-transform touch:duration-500 touch:pressed:delay-75 touch:pressed:duration-375 group-hover:scale-105 touch:pressed:scale-105',
                 fitClass,
                 anchorClass,
               ]}
