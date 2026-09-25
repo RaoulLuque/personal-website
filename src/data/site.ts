@@ -1,4 +1,4 @@
-const email = 'raoul.luque@gmail.com';
+const email = 'raoulsluque@gmail.com';
 
 export const site = {
   author: 'Raoul Luque',
