@@ -9,7 +9,7 @@ export const talks: Talk[] = [
     year: 2026,
     note: 'Elevator Pitch',
     links: {
-      slides: 'https://example.com/slides.pdf',
+      slides: 'slides_frico_2026.pdf',
     },
   },
 ];
